@@ -136,7 +136,7 @@ Tras crear los archivos, los editamos.
        '''Index page route'''
        return '<h1>App desplegada</h1>'
 
-.. code-bloc:: python
+.. code-block:: python
    :caption: Contenido de ``/var/www/app/wsgi.py``
 
    from application import app
@@ -217,7 +217,7 @@ así:
 .. note::
 
    Y tras ello debemos salir de nuestro entorno virtual con el
-   sencillo comando ``deactivate``
+   sencillo comando ``exit`` (o ``deactivate``)
 
 Puesto que ya debemos tener instalado Nginx en nuestro sistema, lo
 iniciamos y comprobamos que su estado sea activo:
@@ -241,8 +241,7 @@ Ya fuera de nuestro entorno virtual, crearemos un archivo para que
    Group=www-data
    Environment="PATH=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin"
    WorkingDirectory=/var/www/app
-   ExecStart=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin/gunicorn --workers 3
-   --bind unix:/var/www/app/app.sock wsgi:app
+   ExecStart=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin/gunicorn --workers 3 --bind unix:/var/www/app/app.sock wsgi:app
 
    [Install]
    WantedBy=multi-user.target

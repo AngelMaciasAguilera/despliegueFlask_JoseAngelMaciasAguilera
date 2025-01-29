@@ -371,17 +371,26 @@ contendrá la aplicación propiamente dicha será <code class="docutils literal 
 </pre></div>
 </div>
 </div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Contenido de <code class="docutils literal notranslate"><span class="pre">/var/www/app/wsgi.py</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">application</span> <span class="kn">import</span> <span class="n">app</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+   <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <p>Corramos ahora nuestra aplicación a modo de comprobación con el
 servidor web integrado de Flask. Si especificamos la dirección
 <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> lo que le estamos diciendo al servidor es que escuche en
 todas sus interfaces, si las tuviera:</p>
-<div class="literal-block-wrapper docutils container" id="id5">
+<div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text">Salida del arranque del servidor.  En mi caso al estar en
 Virtualbox tras una red NAT, debo en las opciones de red
 de la tarjeta NAT de la máquina virtual redirigir los
 puertos desde el anfitrión <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> en el puerto
 <code class="docutils literal notranslate"><span class="pre">5000</span></code> a el invitado (MV) en el puerto <code class="docutils literal notranslate"><span class="pre">5000</span></code>. Si tu
-MV está en adaptador puente no hace falta.</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+MV está en adaptador puente no hace falta.</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(app)</span> <span class="gp">vagrant@bullseye:/var/www/app$ </span>flask<span class="w"> </span>run<span class="w"> </span>--host<span class="w"> </span><span class="s1">&#39;0.0.0.0&#39;</span>
 <span class="go">* Serving Flask app &#39;wsgi.py&#39;</span>
 <span class="go">* Debug mode: off</span>
@@ -403,8 +412,8 @@ el servidor de desarrollo de Flask, podéis usar el comando
 <code class="docutils literal notranslate"><span class="pre">gunicorn</span> <span class="pre">--workers</span> <span class="pre">4</span> <span class="pre">--bind</span> <span class="pre">0.0.0.0:5000</span> <span class="pre">wsgi:app</span></code> para probar que
 la alicación funciona correctamente usando Gunicorn, accediendo con
 vuestro navegador de la misma forma que en el paso anterior:</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Ejecutar gunicorn</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Ejecutar gunicorn</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(app)</span> <span class="gp">vagrant@bullseye:/var/www/app$ </span>gunicorn<span class="w"> </span>--workers<span class="w"> </span><span class="m">4</span><span class="w"> </span>--bind<span class="w"> </span><span class="m">0</span>.0.0.0:5000<span class="w"> </span>wsgi:app
 </pre></div>
 </div>
@@ -438,7 +447,7 @@ servicio de <code class="docutils literal notranslate"><span class="pre">systemd
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Y tras ello debemos salir de nuestro entorno virtual con el
-sencillo comando <code class="docutils literal notranslate"><span class="pre">deactivate</span></code></p>
+sencillo comando <code class="docutils literal notranslate"><span class="pre">exit</span></code> (o <code class="docutils literal notranslate"><span class="pre">deactivate</span></code>)</p>
 </div>
 <p>Puesto que ya debemos tener instalado Nginx en nuestro sistema, lo
 iniciamos y comprobamos que su estado sea activo:</p>
@@ -448,8 +457,8 @@ iniciamos y comprobamos que su estado sea activo:</p>
 </div>
 <p>Ya fuera de nuestro entorno virtual, crearemos un archivo para que
 <code class="docutils literal notranslate"><span class="pre">systemd</span></code> corra Gunicorn como un servicio del sistema más:</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">Fichero <code class="docutils literal notranslate"><span class="pre">/etc/systemd/system/flask_app.service</span></code></span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Fichero <code class="docutils literal notranslate"><span class="pre">/etc/systemd/system/flask_app.service</span></code></span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
 <div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">flask app service - App con flask y Gunicorn</span>
 <span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
@@ -458,8 +467,7 @@ iniciamos y comprobamos que su estado sea activo:</p>
 <span class="na">Group</span><span class="o">=</span><span class="s">www-data</span>
 <span class="na">Environment</span><span class="o">=</span><span class="s">&quot;PATH=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin&quot;</span>
 <span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/var/www/app</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin/gunicorn --workers 3</span>
-<span class="na">--bind unix</span><span class="o">:</span><span class="s">/var/www/app/app.sock wsgi:app</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin/gunicorn --workers 3 --bind unix:/var/www/app/app.sock wsgi:app</span>
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
@@ -505,8 +513,8 @@ es algo que ya deberíamos tener dominado de capítulos anteriores.</p>
 estableceremos la configuración para ese sitio web. El archivo, como
 recordáis, debe estar en <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available/app.conf</span></code> y tras
 ello lo editamos para que quede:</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Fichero <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available/app.conf</span></code></span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Fichero <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available/app.conf</span></code></span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
 <div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kn">listen</span><span class="w"> </span><span class="mi">80</span><span class="p">;</span>
 <span class="hll"><span class="w">  </span><span class="kn">server_name</span><span class="w"> </span><span class="s">app.izv</span><span class="w"> </span><span class="s">www.app.izv</span><span class="p">;</span>
@@ -544,14 +552,14 @@ sitios webs disponibles al de sitios web activos:</p>
 </div>
 <p>Nos aseguramos de que la configuración de Nginx no contiene errores,
 reiniciamos Nginx y comprobamos que se estado es activo:</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Comprobar sintáxis de la configuración de Nginx</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Comprobar sintáxis de la configuración de Nginx</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo nginx -t</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">Rearrancamos el servidor</span><a class="headerlink" href="#id10" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Rearrancamos el servidor</span><a class="headerlink" href="#id11" title="Link to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo systemctl restart nginx</span>
 <span class="go">sudo systemctl status nginx</span>
 </pre></div>
@@ -565,8 +573,8 @@ que asocie la IP de la máquina virtual, a nuestro <code class="docutils literal
 <p>Este archivo, en Linux, está en <code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> y en Windows en
 <code class="docutils literal notranslate"><span class="pre">C:\Windows\System32\drivers\etc\hosts</span></code></p>
 <p>Y deberemos añadirle la línea:</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">Sustituir la IP por la que tenga nuestro anfitrión o MV</span><a class="headerlink" href="#id11" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Sustituir la IP por la que tenga nuestro anfitrión o MV</span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">192.168</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span> <span class="n">app</span><span class="o">.</span><span class="n">izv</span> <span class="n">www</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">izv</span>
 </pre></div>
 </div>

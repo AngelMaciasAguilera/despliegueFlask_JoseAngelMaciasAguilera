@@ -18,12 +18,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", name: "app_deploy", inline: <<-SHELL
     sudo mkdir -p /var/www/app
-    sudo chown -R $USER:www-data /var/www/app
+    sudo chown -R vagrant:www-data /var/www/app
     sudo chmod -R 775 /var/www/app
-    sudo cp -vr /vagrant/app_provision/.env  /var/www/app
-    sudo chown -R $USER:www-data /var/www/app
-    sudo chmod -R 775 /var/www/app
-    
+    sudo cp -vr /vagrant/app_provision/.env  /var/www/app   
   SHELL
 
   config.vm.provision "shell", name: "virtual_environment_provision", privileged: false, inline: <<-SHELL
@@ -49,7 +46,4 @@ Vagrant.configure("2") do |config|
        systemctl restart nginx
     SHELL
   end 
-
-
-
 end
