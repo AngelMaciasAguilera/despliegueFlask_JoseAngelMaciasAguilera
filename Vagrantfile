@@ -12,6 +12,42 @@ Vagrant.configure("2") do |config|
       sudo apt-get update
   SHELL
 
+  config.vm.provision "shell", name: "python_provision", inline: <<-SHELL
+    sudo apt-get install -y python3-pip
+    pip3 install pipenv
+    
+    PATH=$PATH:/home/$USER/.local/bin
+    pip3 install python-dotenv
+  SHELL
+
+  config.vm.provision "shell", name: "app_deploy", inline: <<-SHELL
+    sudo mkdir -p /var/www/app
+    sudo chown -R $USER:www-data /var/www/app
+    sudo chmod -R 775 /var/www/app
+    sudo cp -vr /vagrant/app_provision/.env  /var/www/app   
+    cd /var/www/app
+    pipenv Shell
+    pipenv install flask gunicorn
+    sudo cp -vr /vagrant/app_provision/application.py  /var/www/app  
+    sudo cp -vr /vagrant/app_provision/wsgi.py /var/www/app    
+    sudo cp -vr /vagrant/app_provision/flask_app.service  /etc/systemd/system  
+    sudo systemctl daemon-reload
+    sudo systemctl enable flask_app
+    sudo systemctl start flask_app
+    exit 
+    sudo cp -vr /vagrant/app_provision/app.conf   /etc/nginx/sites-available/
+    sudo ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/
+    sudo systemctl restart nginx
+
+  SHELL
+
+  config.vm.provision "shell", name: "virtual_environment_provision", privileged: false, inline: <<-SHELL
+    PATH=$PATH:/home/$USER/.local/bin
+    pip3 install pipenv 
+    pip3 install python-dotenv 
+  SHELL
+
+
   
   
   config.vm.define "nginx_machine" do |nginx_machine| 
