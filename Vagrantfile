@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     sudo chmod -R 775 /var/www/app
     sudo cp -vr /vagrant/app_provision/.env  /var/www/app   
     cd /var/www/app
-    pipenv Shell
+    pipenv shell
     pipenv install flask gunicorn
     sudo cp -vr /vagrant/app_provision/application.py  /var/www/app  
     sudo cp -vr /vagrant/app_provision/wsgi.py /var/www/app    
