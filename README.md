@@ -87,9 +87,9 @@ Una vez hecho esto habilito el servidor flask con:
 
 
 Por ultimo habilito la pagina en nginx/sites-available y le creo el enlace simbolico a nginx/sites-enabled y por ultimo recargo:
-`sudo cp -vr /vagrant/app_provision/app.conf  /etc/nginx/sites-available/`
-`sudo ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/`
-`sudo systemctl restart nginx`
+`sudo cp -vr /vagrant/app_provision/app.conf  /etc/nginx/sites-available/`  
+`sudo ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/`  
+`sudo systemctl restart nginx`  
 
 
 ### Vista de la aplicacion desplegada
