@@ -1,10 +1,11 @@
 [Unit]
 Description=flask app service - App con flask y Gunicorn
 After=network.target
+
 [Service]
 User=vagrant
 Group=www-data
-Environment="PATH=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin"
+Environment="PATH=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin:$PATH"
 WorkingDirectory=/var/www/app
 ExecStart=/home/vagrant/.local/share/virtualenvs/app-1lvW3LzD/bin/gunicorn --workers 3 --bind unix:/var/www/app/app.sock wsgi:app
 
