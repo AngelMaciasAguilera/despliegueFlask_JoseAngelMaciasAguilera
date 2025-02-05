@@ -18,6 +18,7 @@ Vagrant.configure("2") do |config|
       sudo cp -vr /vagrant/app_provision/application.py /var/www/app
       sudo cp -vr /vagrant/app_provision/wsgi.py /var/www/app
       sudo cp -vr /vagrant/app_provision/flask_app.service  /etc/systemd/system/
+      sudo systemctl enable flask_app
     SHELL
 
     # Instalación de NGINX
