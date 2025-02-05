@@ -21,11 +21,18 @@ Vagrant.configure("2") do |config|
       sudo systemctl enable flask_app
     SHELL
 
-    # Instalación de NGINX
+
+
     nginx_machine.vm.provision "shell", name: "nginx_installation", inline: <<-SHELL
       sudo apt-get -y install nginx
       sudo rm /etc/nginx/sites-available/default
       sudo rm /etc/nginx/sites-enabled/default
+      sudo systemctl restart nginx
+    SHELL
+
+    nginx_machine.vm.provision "shell", name: "nginx_provisions", inline: <<-SHELL
+      sudo cp -vr /vagrant/app_provision/app.conf  /etc/nginx/sites-available/
+      sudo ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/
       sudo systemctl restart nginx
     SHELL
 

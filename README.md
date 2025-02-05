@@ -16,6 +16,7 @@ Este proyecto describe los pasos necesarios para configurar un entorno de desarr
         - vagrant ssh
     3. Una vez en nuestra maquina virtual ejecutamos el comando:
         - sudo systemctl start flask_app
+        - sudo systemctl restart flask_app
     
     Y con esto nuestra aplicacion con flask estaria arrancada y lista para usarse.
 
@@ -60,8 +61,8 @@ y le pongo los permisos necesarios con:
 
 copio todo el contenido de mi aplicacion  la carpeta /var/www/app con: 
 
-`sudo cp -vr /vagrant/app_provision/.env /var/www/app`
-`sudo cp -vr /vagrant/app_provision/application.py /var/www/app`
+`sudo cp -vr /vagrant/app_provision/.env /var/www/app`  
+`sudo cp -vr /vagrant/app_provision/application.py /var/www/app`  
 `sudo cp -vr /vagrant/app_provision/wsgi.py /var/www/app`
 
 #### Recomendacion
@@ -77,8 +78,20 @@ copio todo el contenido de mi aplicacion  la carpeta /var/www/app con:
 
 
 copio el contenido con la informacion del socket o servidor de flask que vamos a ejecutar en /etc/systemd/system con: 
+
 `sudo cp -vr /vagrant/app_provision/flask_app.service  /etc/systemd/system/`
 
+Una vez hecho esto habilito el servidor flask con:  
+
+`sudo systemctl enable flask_app`
 
 
+Por ultimo habilito la pagina en nginx/sites-available y le creo el enlace simbolico a nginx/sites-enabled y por ultimo recargo:
+`sudo cp -vr /vagrant/app_provision/app.conf  /etc/nginx/sites-available/`
+`sudo ln -s /etc/nginx/sites-available/app.conf /etc/nginx/sites-enabled/`
+`sudo systemctl restart nginx`
 
+
+### Vista de la aplicacion desplegada
+
+![alt text](captures/image.png)
