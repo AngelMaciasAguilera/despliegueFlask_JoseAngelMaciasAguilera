@@ -28,3 +28,57 @@ Flask es un framework ligero de Python para hacer aplicaciones web rápido y fá
 
 Gunicorn (Green Unicorn) es un servidor WSGI para aplicaciones Python, rápido y eficiente. Se encarga de ejecutar Flask (u otros frameworks) en producción, manejando múltiples conexiones a la vez; a dichas conexiones podemos establecer cuantos hilos queremos que se ejecute basados en nuestra cpu, estos hilos son usualmente llamados **workers**. Básicamente, es el que hace que tu app no se rompa cuando llegan muchas visitas.
 
+
+### Pasos que he seguido 
+
+- Pasos previos
+    - Hacer sudo apt-get update para actualizar nuestra maquina
+
+    - Instalar nginx como viene en el vagrant file
+
+
+
+Primero instalo pip mediante el comando:
+
+`sudo apt-get install -y python3-pip`
+
+
+Una vez hecho eso, instalé pipenv para crear y gestionar el entorno virtual, y python-dotenv para cargar las variables de entorno desde un archivo .env de manera sencilla.  Para ello los comandos: 
+
+`pip3 install pipenv`
+`pip3 install python-dotenv`
+
+Despues creo la carpeta de mi aplicacion con:
+
+`sudo mkdir -p /var/www/app`
+
+y le pongo los permisos necesarios con: 
+
+`sudo chown -R vagrant:www-data /var/www/app`
+`sudo chmod -R 775 /var/www/app` 
+
+
+copio todo el contenido de mi aplicacion  la carpeta /var/www/app con: 
+
+`sudo cp -vr /vagrant/app_provision/.env /var/www/app`
+`sudo cp -vr /vagrant/app_provision/application.py /var/www/app`
+`sudo cp -vr /vagrant/app_provision/wsgi.py /var/www/app`
+
+#### Recomendacion
+
+**Puedes probar el servidor mediante el servidor de prueba que trae ya el propio flask,  arrancalo usando**  
+
+`pipenv run flask run --host 0.0.0.0`
+
+**O mediante el entorno virtual de pipenv**
+- ejecutar el entorno virtual: `pipenv shell`
+
+`flask run --host 0.0.0.0`
+
+
+copio el contenido con la informacion del socket o servidor de flask que vamos a ejecutar en /etc/systemd/system con: 
+`sudo cp -vr /vagrant/app_provision/flask_app.service  /etc/systemd/system/`
+
+
+
+
